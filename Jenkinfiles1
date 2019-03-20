@@ -1,11 +1,11 @@
 pipeline {
-    agent { label 'mavenlabel' }
+    agent { label 'LocalMaven' }
 
     stages {
         stage ('Compile Stage') {
 
             steps {
-                withMaven(maven : 'MyMaven') {
+                withMaven(maven : 'LocalMaven') {
                     sh 'mvn clean compile'
                 }
             }
@@ -15,7 +15,7 @@ pipeline {
         stage ('Testing Stage') {
 
             steps {
-                withMaven(maven : 'MyMaven') {
+                withMaven(maven : 'LocalMaven') {
                     sh 'mvn test'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
         stage ('Build on Slave Stage') {
 
             steps {
-                withMaven(maven : 'MyMaven') {
+                withMaven(maven : 'LocalMaven') {
                     sh 'mvn package'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
        
             steps {
                 sshagent (credentials: ['tomcat']) {
-                    sh 'scp -o StrictHostKeyChecking=no /home/ec2-user/jenkins-slave/workspace/Agent-job/target/*.jar ec2-user@35.166.214.243:/opt/tomcat/webapps/'
+                    sh 'scp -o StrictHostKeyChecking=no /home/ec2-user/jenkins-slave/workspace/Agent-job/target/*.jar ec2-user@18.184.170.31:/opt/tomcat/webapps/'
                 }
             }
         }
@@ -53,7 +53,7 @@ pipeline {
         
         stage ('Deployment Stage') {
             steps {
-                withMaven(maven : 'MyMaven') {
+                withMaven(maven : 'LocalMaven') {
                     sh 'mvn install'
                 }
             }
