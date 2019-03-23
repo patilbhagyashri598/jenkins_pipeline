@@ -1,1 +1,40 @@
-
+pipeline
+{
+agent any
+stages
+{
+    stage('compile stage') {
+           steps {
+              withMaven(maven : 'LocalMaven') 
+                {
+                sh 'mvn clean compile'
+                }
+            }
+    }
+    
+    stage('testing stage'){
+          steps{
+            withMaven(maven : 'LocalMaven')
+            {
+              sh 'mvn test'
+            }
+          }
+    }
+    
+    stage('packaging stage'){
+         steps{
+            withMaven(maven : 'LocalMaven'){
+              sh 'mvn package'
+            }
+         }
+    }
+    
+    stage('Deployment stage'){
+        steps{
+            withMaven(maven : 'LocalMaven'){
+                sh 'mvn install'
+            }
+        }
+    }
+}
+}
