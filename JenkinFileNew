@@ -1,6 +1,6 @@
 node {
     stage('Build') {
-        sh 'make'
+        echo 'hi bhagya'
     }
 
 }
